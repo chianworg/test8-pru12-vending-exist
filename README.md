@@ -5,7 +5,7 @@ Use LZ vending with existing subscription
 https://learn.microsoft.com/en-us/azure/governance/management-groups/overview#moving-management-groups-and-subscriptions
 
 
-## Permissions assigned to SPN
+## Permissions assigned to SPN pru12-lbu1vend-exist
 - Owner role on the subscription to be moved
 - Management Group Contributor on source management group
 - Management Group Contributor on target management group

@@ -1,12 +1,21 @@
 name: LZ vending with existing subscription
 on:
   workflow_dispatch:
+    inputs:
+      terraform_action:
+        description: 'Terraform Action to perform'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - 'apply'
+          - 'destroy'
 
 permissions:
   id-token: write
   contents: read
 jobs:
-  create-lz-vending:
+  modify-lz-vending:
     environment: lzvending
     runs-on: ubuntu-latest
     steps:
@@ -41,15 +50,27 @@ jobs:
         run: |
           terraform init
 
-      - name: Terraform plan
+      - name: Terraform plan apply
         env:
           ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
+        if: ${{ github.event.inputs.terraform_action == 'apply' }}  
         run: |
           terraform plan -out apply.tfplan
-    
+
+      - name: Terraform plan destroy
+        env:
+          ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: true
+        if: ${{ github.event.inputs.terraform_action == 'destroy' }}            
+        run: |
+          terraform plan -destroy -out apply.tfplan          
+          
+
       - name: Terraform apply
         env:
           ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
