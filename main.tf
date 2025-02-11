@@ -6,6 +6,7 @@ module "lz_vending" {
 
   # existing subscription
   subscription_id = "d30aa1af-4fdf-427b-b19b-7fd032ffd95c"
+  subscription_display_name = "ME-MngEnvMCAP310488-m1hub-3"
 
   # management group association variables
   subscription_management_group_association_enabled = true
